@@ -1,18 +1,13 @@
-;;;(push #p"~/development/swagger/cl-maprcli/" asdf:*central-registry*)
+;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: CL-USER -*-
 
-;;; (ql:quickload :cl-maprcli)
-;;; (ql:quickload :prove)
 (defpackage my-test
   (:use :cl :prove :cl-maprcli))
 
 (in-package :my-test)
 
-
 ;; test changing of hostname
-(cl-maprcli::set-host "http://aaa.bbb.ccc")
-
+(cl-maprcli::set-host "http://aaa.bbb.ccc") ; The :: should be needed with the :use line in package definition
 (is cl-maprcli::*host* "http://aaa.bbb.ccc")
-
 
 ;; test making url paths
 (is (cl-maprcli::make-url-path :host "hostname" :path "test/list") "hostname/test/list")
@@ -21,15 +16,12 @@
 
 (defparameter alist (pairlis '(c b a) '(3 2 1)))
 
-
 ;; test make params
 (is (cl-maprcli::make-url-param alist) "A=1&B=2&C=3")
 (is (string-downcase (cl-maprcli::make-url-param alist)) "a=1&b=2&c=3")
 
-
 ;; test make alist 
 (is (cl-maprcli::list-to-alist '(a 1 b 2 c 3)) alist)
-
 
 ;; test removing alist
 (defvar aalist '((a . 1) (b . 2) (c . 3)))

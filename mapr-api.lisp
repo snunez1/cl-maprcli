@@ -1,42 +1,42 @@
 ;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: CL-MAPRCLI -*-
 
-(in-package "cl-maprcli")
+(in-package :cl-maprcli)
 
-
-;; MapR CLI basic Context info
+;;; MapR CLI basic context
 (defparameter *context* '((:host . "http://localhost:8443/rest")
                           (:basic-authorization . ("mapr" "mapr"))
                           (:output . :pretty)))
 
-;; setter/getter context info
+;;; setter/getter context info
 (defun set-host (host)
-  "setter for host name. ex: (set-host \"https://192.168.2.51:8443/rest\")"
+  "Setter for host name. ex: (set-host \"https://192.168.2.51:8443/rest\")"
   (let ((ctx (assoc :host *context*)))
     (when ctx
       (rplacd ctx host))))
 
 (defun set-output-option (option)
+  "Set default output format"
   (let ((ctx (assoc :output *context*)))
     (when ctx
       (rplacd ctx option))))
 
-(defun set-authorization (auth)
-  "setter for autorization info. ex: (set-authorization (list \"mapr\" \"mapr\"))"
+(defun set-authentication (auth)
+  "Set cluster authentication credentials. ex: (set-authentication (list \"mapr\" \"mapr\"))"
   (let ((ctx (assoc :basic-authorization *context*)))
     (when ctx
       (rplacd ctx auth))))
 
 (defun list-to-alist (olist)
-  "convert list to alist."
+  "Convert list to alist"
   (when (and olist (evenp (length olist)))
     (cons (cons (car olist) (cadr olist)) (list-to-alist (cddr olist)))))
 
 (defun get-val (item alist)
-  "getter for alist"
+  "Getter for alist"
   (cdr (assoc item alist)))
 
 (defun make-inputformat-from-user (rest)
-  "convert user input list into parameter type.
+  "Convert user input list into parameter type.
    ex: (make-inputformat-from-user '(:a 1 :b 2 :host \"abc\" :basic-authorization '(\"m\" \"m\")))"
   (let* ((alist (list-to-alist rest))
          (output (let ((tmp (get-val :output alist)))
@@ -56,29 +56,21 @@
                                      (get-val :basic-authorization *context*)))))
     (values host basic-authorization alist output)))
 
-
 (defmacro maprcli (cmd-path &rest rest)
-  "run maprcli command. ex: (maprcli \"/VOLUME/INFO\" :path \"/\")"
+  "Run maprcli command. ex: (maprcli \"/VOLUME/INFO\" :path \"/\")"
   `(multiple-value-bind (host basic-authorization alist output)
        (make-inputformat-from-user ',rest)
      (rest-call host ,cmd-path basic-authorization alist output)))
 
-;;(maprcli "/volume/info" :path "/" :output :pretty)
-;;(maprcli "/table/region/list" :path "/chatbot.prod/insa_master_002" :output :pretty)
-
-
 (defmacro maprcli-defs (cmd-path)
-  "macro for creating maprcli request functions"
+  "Macro for creating maprcli request functions"
   (let ((function-name (intern (string-upcase (subseq (substitute #\- #\/ cmd-path) 1)))))
     `(defun ,function-name (&rest rest)
        (multiple-value-bind (host basic-authorization alist output)
            (make-inputformat-from-user rest)
          (rest-call host ,cmd-path basic-authorization alist output)))))
 
-;;(macroexpand-1 '(maprcli-defs "/volume/info"))
-
-
-;;; making functions for maprcli
+;;; Create the MapR API
 (maprcli-defs "/ACL/EDIT")
 (maprcli-defs "/ACL/SET")
 (maprcli-defs "/ACL/SHOW")
@@ -240,8 +232,3 @@
 (maprcli-defs "/VOLUME/SNAPSHOT/REMOVE")
 (maprcli-defs "/VOLUME/UNMOUNT")
 (maprcli-defs "/VOLUME/UPGRADEFORMAT")
-
-
-;;(set-host "http://maprdemo:8443/rest")
-;;(volume-info :path "/")
-;;(volume-list)

@@ -1,11 +1,12 @@
 ;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: CL-USER -*-
 
 (asdf:defsystem "cl-maprcli"
-  :description "lisp version for MapR maprcli command"
+  :description "MapR control system API"
   :author "Inchul <ijung@mapr.com>"
   :license "BSD"
   :serial t
-  :depends-on ("cl-json")
+  :depends-on ("cl-json"
+	       "drakma")
   :in-order-to ((test-op (test-op "cl-maprcli/tests")))
   :components ((:file "package")
                (:file "cl-maprcli")

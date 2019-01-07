@@ -1,0 +1,4 @@
+* TODO Complete refactoring of authorization -> authentication. We are authenticating, not authorizing here.
+* TODO Review exported symbols. Are all of them required? Some look like internal symbols
+* TODO Use functions from Alexandria to operate on alists
+* TODO Create tests for MapR API. Existing tests do not test any significant functionality

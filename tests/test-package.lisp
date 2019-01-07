@@ -1,9 +1,9 @@
-;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: maprcli-tests -*-
+;;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: CL-USER -*-
 
 (defpackage "MAPRCLI-TESTS"
   (:use "CL"
         "FIVEAM"
-        "cl-maprcli")
+        "CL-MAPRCLI")
   (:export #:run!
            #:test-maprcli
            #:all-tests))
