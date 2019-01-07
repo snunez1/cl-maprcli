@@ -2,7 +2,7 @@
 
 (asdf:defsystem "cl-maprcli"
   :description "MapR control system API"
-  :author "Inchul <ijung remove-the-at mapr dot com>"
+  :author "Inchul <ijung@mapr.com>"
   :license "BSD"
   :serial t
   :depends-on ("cl-json"
@@ -14,7 +14,7 @@
 
 (asdf:defsystem "cl-maprcli/tests"
   :description "test cl-maprcli"
-  :author "Inchul <ijung remove-the-at mapr dot com>"
+  :author "Inchul <ijung@mapr.com>"
   :depends-on ("fiveam"
                "cl-maprcli")
   :components ((:module "tests"
